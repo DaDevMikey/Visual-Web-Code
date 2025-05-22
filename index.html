@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visual Web Code</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/split.js@1.6.5/dist/split.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.39.0/min/vs/loader.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "prismjs": "https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js",
+            "prismjs/components/": "https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/"
+        }
+    }
+    </script>
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-left">
+                <div class="logo">
+                    <span class="material-symbols-rounded">code</span>
+                    <h1>Visual Web Code</h1>
+                </div>
+                <nav class="main-menu">
+                    <button id="file-menu-btn">File</button>
+                    <button id="edit-menu-btn">Edit</button>
+                    <button id="view-menu-btn">View</button>
+                    <button id="run-menu-btn">Run</button>
+                    <button id="terminal-menu-btn">Terminal</button>
+                    <button id="help-menu-btn">Help</button>
+                </nav>
+            </div>
+            <div class="header-right">
+                <div class="search-container">
+                    <span class="material-symbols-rounded">search</span>
+                    <input type="text" placeholder="Search (Ctrl+F)">
+                </div>
+                <button class="icon-button" id="settings-btn" title="Settings">
+                    <span class="material-symbols-rounded">settings</span>
+                </button>
+            </div>
+        </header>
+        
+        <div class="main-container">
+            <aside class="activity-bar">
+                <div class="top-actions">
+                    <button class="icon-button active" title="Explorer">
+                        <span class="material-symbols-rounded">description</span>
+                    </button>
+                    <button class="icon-button" title="Search">
+                        <span class="material-symbols-rounded">search</span>
+                    </button>
+                    <button class="icon-button" title="Source Control">
+                        <span class="material-symbols-rounded">source_control</span>
+                    </button>
+                    <button class="icon-button" title="Run and Debug">
+                        <span class="material-symbols-rounded">bug_report</span>
+                    </button>
+                    <button class="icon-button" title="Extensions">
+                        <span class="material-symbols-rounded">extension</span>
+                    </button>
+                </div>
+                <div class="bottom-actions">
+                    <button class="icon-button" id="settings-btn-sidebar" title="Settings">
+                        <span class="material-symbols-rounded">settings</span>
+                    </button>
+                </div>
+            </aside>
+            
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <h2>EXPLORER</h2>
+                </div>
+                <div class="sidebar-actions">
+                    <button class="icon-button" id="new-file-btn" title="New File">
+                        <span class="material-symbols-rounded">add</span>
+                    </button>
+                    <button class="icon-button" id="new-folder-btn" title="New Folder">
+                        <span class="material-symbols-rounded">create_new_folder</span>
+                    </button>
+                    <button class="icon-button" id="refresh-explorer-btn" title="Refresh">
+                        <span class="material-symbols-rounded">refresh</span>
+                    </button>
+                    <button class="icon-button" id="collapse-all-btn" title="Collapse All">
+                        <span class="material-symbols-rounded">unfold_less</span>
+                    </button>
+                </div>
+                <div class="file-explorer">
+                    <ul id="project-root">
+                        <li class="folder open">
+                            <div class="folder-header">
+                                <span class="material-symbols-rounded">expand_more</span>
+                                <span class="material-symbols-rounded">folder_open</span>
+                                <span>project</span>
+                            </div>
+                            <ul>
+                                <li class="file active" data-file-path="app.js">
+                                    <span class="material-symbols-rounded">javascript</span>
+                                    <span>app.js</span>
+                                </li>
+                                <li class="file" data-file-path="index.html">
+                                    <span class="material-symbols-rounded">html</span>
+                                    <span>index.html</span>
+                                </li>
+                                <li class="file" data-file-path="styles.css">
+                                    <span class="material-symbols-rounded">css</span>
+                                    <span>styles.css</span>
+                                </li>
+                                <li class="folder">
+                                    <div class="folder-header">
+                                        <span class="material-symbols-rounded">chevron_right</span>
+                                        <span class="material-symbols-rounded">folder</span>
+                                        <span>assets</span>
+                                    </div>
+                                    <ul></ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </aside>
+            
+            <main class="editor-container">
+                <div class="editor-tabs" id="editor-tabs">
+                    <div class="tab active" data-file-path="app.js">
+                        <span class="material-symbols-rounded">javascript</span>
+                        <span>app.js</span>
+                        <button class="tab-close">
+                            <span class="material-symbols-rounded">close</span>
+                        </button>
+                    </div>
+                    <div class="tab" data-file-path="index.html">
+                        <span class="material-symbols-rounded">html</span>
+                        <span>index.html</span>
+                        <button class="tab-close">
+                            <span class="material-symbols-rounded">close</span>
+                        </button>
+                    </div>
+                    <div class="tab" data-file-path="styles.css">
+                        <span class="material-symbols-rounded">css</span>
+                        <span>styles.css</span>
+                        <button class="tab-close">
+                            <span class="material-symbols-rounded">close</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="editor-area" id="editor"></div>
+                
+                <div class="panel-container">
+                    <div class="panel-tabs">
+                        <div class="tab active" data-panel="terminal">
+                            <span class="material-symbols-rounded">terminal</span>
+                            <span>Terminal</span>
+                        </div>
+                        <div class="tab" data-panel="output">
+                            <span class="material-symbols-rounded">output</span>
+                            <span>Output</span>
+                        </div>
+                        <div class="tab" data-panel="problems">
+                            <span class="material-symbols-rounded">error</span>
+                            <span>Problems</span>
+                        </div>
+                    </div>
+                    <div class="panel-content" id="panel-content">
+                        <div class="terminal panel-view active" id="terminal-panel">
+                            <div class="terminal-line">
+                                <span class="prompt">$</span>
+                                <span class="command">npm start</span>
+                            </div>
+                            <div class="terminal-line output">
+                                <span>Starting development server...</span>
+                            </div>
+                            <div class="terminal-line output">
+                                <span>Compiled successfully!</span>
+                            </div>
+                            <div class="terminal-line output">
+                                <span>App running at http://localhost:3000</span>
+                            </div>
+                            <div class="terminal-line current">
+                                <span class="prompt">$</span>
+                                <span class="cursor"></span>
+                            </div>
+                        </div>
+                        <div class="output panel-view" id="output-panel">
+                            <div class="output-line">Console output will appear here.</div>
+                        </div>
+                        <div class="problems panel-view" id="problems-panel">
+                            <div class="problem-list">No problems detected.</div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+        
+        <footer class="status-bar">
+            <div class="status-left">
+                <div class="status-item">
+                    <span class="material-symbols-rounded">error</span>
+                    <span>0</span>
+                    <span class="material-symbols-rounded">warning</span>
+                    <span>0</span>
+                </div>
+                <div class="status-item">
+                    <span class="material-symbols-rounded">branch</span>
+                    <span>main</span>
+                </div>
+            </div>
+            <div class="status-right">
+                <div class="status-item">JavaScript</div>
+                <div class="status-item">UTF-8</div>
+                <div class="status-item">Ln 14, Col 42</div>
+                <div class="status-item">Spaces: 2</div>
+            </div>
+        </footer>
+    </div>
+    
+    <!-- Dropdown Menus -->
+    <div class="dropdown-menu" id="file-menu">
+        <div class="dropdown-item" id="new-file">
+            <span><span class="material-symbols-rounded">add</span>New File</span>
+            <span class="shortcut">Ctrl+N</span>
+        </div>
+        <div class="dropdown-item" id="new-folder">
+            <span><span class="material-symbols-rounded">create_new_folder</span>New Folder</span>
+        </div>
+        <div class="dropdown-separator"></div>
+        <div class="dropdown-item" id="save-file">
+            <span><span class="material-symbols-rounded">save</span>Save</span>
+            <span class="shortcut">Ctrl+S</span>
+        </div>
+        <div class="dropdown-item" id="save-all">
+            <span><span class="material-symbols-rounded">save_all</span>Save All</span>
+            <span class="shortcut">Ctrl+Shift+S</span>
+        </div>
+        <div class="dropdown-separator"></div>
+        <div class="dropdown-item" id="open-project">
+            <span><span class="material-symbols-rounded">folder_open</span>Open Project</span>
+        </div>
+    </div>
+
+    <div class="dropdown-menu" id="edit-menu">
+        <div class="dropdown-item" id="undo">
+            <span><span class="material-symbols-rounded">undo</span>Undo</span>
+            <span class="shortcut">Ctrl+Z</span>
+        </div>
+        <div class="dropdown-item" id="redo">
+            <span><span class="material-symbols-rounded">redo</span>Redo</span>
+            <span class="shortcut">Ctrl+Y</span>
+        </div>
+        <div class="dropdown-separator"></div>
+        <div class="dropdown-item" id="cut">
+            <span><span class="material-symbols-rounded">content_cut</span>Cut</span>
+            <span class="shortcut">Ctrl+X</span>
+        </div>
+        <div class="dropdown-item" id="copy">
+            <span><span class="material-symbols-rounded">content_copy</span>Copy</span>
+            <span class="shortcut">Ctrl+C</span>
+        </div>
+        <div class="dropdown-item" id="paste">
+            <span><span class="material-symbols-rounded">content_paste</span>Paste</span>
+            <span class="shortcut">Ctrl+V</span>
+        </div>
+    </div>
+
+    <div class="dropdown-menu" id="view-menu">
+        <div class="dropdown-item" id="toggle-sidebar">
+            <span><span class="material-symbols-rounded">menu</span>Toggle Sidebar</span>
+        </div>
+        <div class="dropdown-item" id="toggle-terminal">
+            <span><span class="material-symbols-rounded">terminal</span>Toggle Terminal</span>
+            <span class="shortcut">Ctrl+`</span>
+        </div>
+        <div class="dropdown-separator"></div>
+        <div class="dropdown-item" id="zoom-in">
+            <span><span class="material-symbols-rounded">zoom_in</span>Zoom In</span>
+            <span class="shortcut">Ctrl+</span>
+        </div>
+        <div class="dropdown-item" id="zoom-out">
+            <span><span class="material-symbols-rounded">zoom_out</span>Zoom Out</span>
+            <span class="shortcut">Ctrl-</span>
+        </div>
+    </div>
+
+    <div class="dropdown-menu" id="run-menu">
+        <div class="dropdown-item" id="run-project">
+            <span><span class="material-symbols-rounded">play_arrow</span>Run Project</span>
+            <span class="shortcut">F5</span>
+        </div>
+        <div class="dropdown-item" id="debug-project">
+            <span><span class="material-symbols-rounded">bug_report</span>Debug Project</span>
+            <span class="shortcut">Ctrl+F5</span>
+        </div>
+        <div class="dropdown-separator"></div>
+        <div class="dropdown-item" id="run-in-new-tab">
+            <span><span class="material-symbols-rounded">open_in_new</span>Run in New Tab</span>
+        </div>
+        <div class="dropdown-item" id="debug-in-new-tab">
+            <span><span class="material-symbols-rounded">open_in_browser</span>Debug in New Tab</span>
+        </div>
+    </div>
+
+    <div class="dropdown-menu" id="terminal-menu">
+        <div class="dropdown-item" id="new-terminal">
+            <span><span class="material-symbols-rounded">add</span>New Terminal</span>
+        </div>
+        <div class="dropdown-item" id="clear-terminal">
+            <span><span class="material-symbols-rounded">clear_all</span>Clear Terminal</span>
+        </div>
+    </div>
+
+    <div class="dropdown-menu" id="help-menu">
+        <div class="dropdown-item" id="documentation">
+            <span><span class="material-symbols-rounded">description</span>Documentation</span>
+        </div>
+        <div class="dropdown-item" id="keyboard-shortcuts">
+            <span><span class="material-symbols-rounded">keyboard</span>Keyboard Shortcuts</span>
+        </div>
+        <div class="dropdown-separator"></div>
+        <div class="dropdown-item" id="about">
+            <span><span class="material-symbols-rounded">info</span>About</span>
+        </div>
+    </div>
+
+    <!-- Context Menu -->
+    <div class="context-menu" id="file-context-menu">
+        <div class="context-menu-item" id="context-open">
+            <span class="material-symbols-rounded">open_in_new</span>
+            <span>Open</span>
+        </div>
+        <div class="context-menu-item" id="context-rename">
+            <span class="material-symbols-rounded">edit</span>
+            <span>Rename</span>
+        </div>
+        <div class="context-menu-item" id="context-delete">
+            <span class="material-symbols-rounded">delete</span>
+            <span>Delete</span>
+        </div>
+        <div class="context-menu-separator"></div>
+        <div class="context-menu-item" id="context-copy-path">
+            <span class="material-symbols-rounded">content_copy</span>
+            <span>Copy Path</span>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settings-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Settings</h2>
+                <button class="modal-close">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3>Appearance</h3>
+                    <div class="setting-item">
+                        <div class="setting-item-description">
+                            <span>Color Theme</span>
+                            <span>Change the look of the editor</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-item-description">
+                            <span>Font Size</span>
+                            <span>Adjust the editor font size</span>
+                        </div>
+                        <select id="font-size-setting">
+                            <option value="12">12px</option>
+                            <option value="14" selected>14px</option>
+                            <option value="16">16px</option>
+                            <option value="18">18px</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <h3>Editor</h3>
+                    <div class="setting-item">
+                        <div class="setting-item-description">
+                            <span>Tab Size</span>
+                            <span>Number of spaces for a tab</span>
+                        </div>
+                        <select id="tab-size-setting">
+                            <option value="2" selected>2</option>
+                            <option value="4">4</option>
+                            <option value="8">8</option>
+                        </select>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-item-description">
+                            <span>Word Wrap</span>
+                            <span>Wrap lines to viewport width</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="word-wrap-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Account Offline Modal -->
+    <div class="modal-overlay" id="account-offline-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Account</h2>
+                <button class="modal-close">
+                    <span class="material-symbols-rounded">close</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; padding: 20px;">
+                    <span class="material-symbols-rounded" style="font-size: 48px; color: var(--md-sys-color-error);">
+                        cloud_off
+                    </span>
+                </p>
+                <p style="text-align: center; margin-bottom: 20px;">
+                    Accounts are currently offline
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="app.js" type="module"></script>
+</body>
+</html>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visual Web Code</title>
+    <link rel="icon" href="favicon.png">
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
@@ -41,6 +42,9 @@
                     <span class="material-symbols-rounded">search</span>
                     <input type="text" placeholder="Search (Ctrl+F)">
                 </div>
+                <button class="icon-button" id="preview-toggle" title="Toggle Preview (Ctrl+Shift+P)">
+                    <span class="material-symbols-rounded">preview</span>
+                </button>
                 <button class="icon-button" id="settings-btn" title="Settings">
                     <span class="material-symbols-rounded">settings</span>
                 </button>
@@ -51,16 +55,16 @@
             <aside class="activity-bar">
                 <div class="top-actions">
                     <button class="icon-button active" title="Explorer">
-                        <span class="material-symbols-rounded">description</span>
+                        <span class="material-symbols-rounded">folder</span>
                     </button>
                     <button class="icon-button" title="Search">
                         <span class="material-symbols-rounded">search</span>
                     </button>
                     <button class="icon-button" title="Source Control">
-                        <span class="material-symbols-rounded">source_control</span>
+                        <span class="material-symbols-rounded">source</span>
                     </button>
                     <button class="icon-button" title="Run and Debug">
-                        <span class="material-symbols-rounded">bug_report</span>
+                        <span class="material-symbols-rounded">play_circle</span>
                     </button>
                     <button class="icon-button" title="Extensions">
                         <span class="material-symbols-rounded">extension</span>
@@ -79,7 +83,7 @@
                 </div>
                 <div class="sidebar-actions">
                     <button class="icon-button" id="new-file-btn" title="New File">
-                        <span class="material-symbols-rounded">add</span>
+                        <span class="material-symbols-rounded">note_add</span>
                     </button>
                     <button class="icon-button" id="new-folder-btn" title="New Folder">
                         <span class="material-symbols-rounded">create_new_folder</span>
@@ -178,10 +182,10 @@
                                 <span>Starting development server...</span>
                             </div>
                             <div class="terminal-line output">
-                                <span>Compiled successfully!</span>
+                                <span>✓ Compiled successfully!</span>
                             </div>
                             <div class="terminal-line output">
-                                <span>App running at http://localhost:3000</span>
+                                <span>🚀 App running at http://localhost:3000</span>
                             </div>
                             <div class="terminal-line current">
                                 <span class="prompt">$</span>
@@ -192,7 +196,7 @@
                             <div class="output-line">Console output will appear here.</div>
                         </div>
                         <div class="problems panel-view" id="problems-panel">
-                            <div class="problem-list">No problems detected.</div>
+                            <div class="problem-list">✅ No problems detected.</div>
                         </div>
                     </div>
                 </div>
@@ -208,7 +212,7 @@
                     <span>0</span>
                 </div>
                 <div class="status-item">
-                    <span class="material-symbols-rounded">branch</span>
+                    <span class="material-symbols-rounded">source</span>
                     <span>main</span>
                 </div>
             </div>
@@ -224,7 +228,7 @@
     <!-- Dropdown Menus -->
     <div class="dropdown-menu" id="file-menu">
         <div class="dropdown-item" id="new-file">
-            <span><span class="material-symbols-rounded">add</span>New File</span>
+            <span><span class="material-symbols-rounded">note_add</span>New File</span>
             <span class="shortcut">Ctrl+N</span>
         </div>
         <div class="dropdown-item" id="new-folder">
@@ -242,6 +246,9 @@
         <div class="dropdown-separator"></div>
         <div class="dropdown-item" id="open-project">
             <span><span class="material-symbols-rounded">folder_open</span>Open Project</span>
+        </div>
+        <div class="dropdown-item" id="download-project">
+            <span><span class="material-symbols-rounded">download</span>Download Project</span>
         </div>
     </div>
 
@@ -272,19 +279,24 @@
     <div class="dropdown-menu" id="view-menu">
         <div class="dropdown-item" id="toggle-sidebar">
             <span><span class="material-symbols-rounded">menu</span>Toggle Sidebar</span>
+            <span class="shortcut">Ctrl+B</span>
         </div>
         <div class="dropdown-item" id="toggle-terminal">
             <span><span class="material-symbols-rounded">terminal</span>Toggle Terminal</span>
             <span class="shortcut">Ctrl+`</span>
         </div>
+        <div class="dropdown-item" id="toggle-preview">
+            <span><span class="material-symbols-rounded">preview</span>Toggle Preview</span>
+            <span class="shortcut">Ctrl+Shift+P</span>
+        </div>
         <div class="dropdown-separator"></div>
         <div class="dropdown-item" id="zoom-in">
             <span><span class="material-symbols-rounded">zoom_in</span>Zoom In</span>
-            <span class="shortcut">Ctrl+</span>
+            <span class="shortcut">Ctrl++</span>
         </div>
         <div class="dropdown-item" id="zoom-out">
             <span><span class="material-symbols-rounded">zoom_out</span>Zoom Out</span>
-            <span class="shortcut">Ctrl-</span>
+            <span class="shortcut">Ctrl+-</span>
         </div>
     </div>
 
@@ -313,11 +325,15 @@
         <div class="dropdown-item" id="clear-terminal">
             <span><span class="material-symbols-rounded">clear_all</span>Clear Terminal</span>
         </div>
+        <div class="dropdown-separator"></div>
+        <div class="dropdown-item" id="run-command">
+            <span><span class="material-symbols-rounded">play_arrow</span>Run Command</span>
+        </div>
     </div>
 
     <div class="dropdown-menu" id="help-menu">
         <div class="dropdown-item" id="documentation">
-            <span><span class="material-symbols-rounded">description</span>Documentation</span>
+            <span><span class="material-symbols-rounded">book</span>Documentation</span>
         </div>
         <div class="dropdown-item" id="keyboard-shortcuts">
             <span><span class="material-symbols-rounded">keyboard</span>Keyboard Shortcuts</span>
@@ -343,6 +359,10 @@
             <span>Delete</span>
         </div>
         <div class="context-menu-separator"></div>
+        <div class="context-menu-item" id="context-download">
+            <span class="material-symbols-rounded">download</span>
+            <span>Download</span>
+        </div>
         <div class="context-menu-item" id="context-copy-path">
             <span class="material-symbols-rounded">content_copy</span>
             <span>Copy Path</span>
@@ -360,11 +380,11 @@
             </div>
             <div class="modal-body">
                 <div class="modal-section">
-                    <h3>Appearance</h3>
+                    <h3>🎨 Appearance</h3>
                     <div class="setting-item">
                         <div class="setting-item-description">
-                            <span>Color Theme</span>
-                            <span>Change the look of the editor</span>
+                            <span>Dark Theme</span>
+                            <span>Switch between light and dark themes</span>
                         </div>
                         <label class="switch">
                             <input type="checkbox" id="theme-toggle">
@@ -377,15 +397,18 @@
                             <span>Adjust the editor font size</span>
                         </div>
                         <select id="font-size-setting">
+                            <option value="10">10px</option>
                             <option value="12">12px</option>
                             <option value="14" selected>14px</option>
                             <option value="16">16px</option>
                             <option value="18">18px</option>
+                            <option value="20">20px</option>
+                            <option value="24">24px</option>
                         </select>
                     </div>
                 </div>
                 <div class="modal-section">
-                    <h3>Editor</h3>
+                    <h3>⚙️ Editor</h3>
                     <div class="setting-item">
                         <div class="setting-item-description">
                             <span>Tab Size</span>
@@ -404,6 +427,29 @@
                         </div>
                         <label class="switch">
                             <input type="checkbox" id="word-wrap-toggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-item-description">
+                            <span>Auto Save</span>
+                            <span>Automatically save files when editing</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="auto-save-toggle" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <h3>🚀 Preview</h3>
+                    <div class="setting-item">
+                        <div class="setting-item-description">
+                            <span>Live Preview</span>
+                            <span>Enable real-time preview updates</span>
+                        </div>
+                        <label class="switch">
+                            <input type="checkbox" id="live-preview-toggle" checked>
                             <span class="slider"></span>
                         </label>
                     </div>
@@ -428,12 +474,45 @@
                     </span>
                 </p>
                 <p style="text-align: center; margin-bottom: 20px;">
-                    Accounts are currently offline
+                    <strong>Accounts are currently offline</strong><br>
+                    <small>This feature will be available in a future update</small>
                 </p>
             </div>
         </div>
     </div>
     
     <script src="app.js" type="module"></script>
+    <script>
+        // Add preview toggle functionality
+        document.getElementById('preview-toggle')?.addEventListener('click', function() {
+            if (window.togglePreview) {
+                window.togglePreview();
+            }
+        });
+        
+        // Add view menu preview toggle
+        document.getElementById('toggle-preview')?.addEventListener('click', function() {
+            if (window.togglePreview) {
+                window.togglePreview();
+            }
+        });
+        
+        // Make toggle functions globally available
+        window.togglePreview = function() {
+            if (window.projectState) {
+                const previewPanel = document.querySelector('.preview-panel');
+                window.projectState.previewMode = !window.projectState.previewMode;
+                
+                if (window.projectState.previewMode) {
+                    previewPanel.classList.add('visible');
+                    if (window.updatePreview) window.updatePreview();
+                    if (window.showNotification) window.showNotification('Preview enabled', 'info');
+                } else {
+                    previewPanel.classList.remove('visible');
+                    if (window.showNotification) window.showNotification('Preview disabled', 'info');
+                }
+            }
+        };
+    </script>
 </body>
 </html>
